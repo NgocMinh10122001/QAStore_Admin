@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import LeftSideBar from "@/components/layout/LeftSideBar";
+import TopBar from "@/components/layout/TopBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
       >
         <div className="flex max-lg:flex-col">
         <LeftSideBar/>
+        <TopBar/>
         <div className="flex-1">{children}</div>
         </div>
       </body>
