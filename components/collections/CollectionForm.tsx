@@ -3,6 +3,8 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+
 
 import { Separator } from "../ui/separator";
 import { Button } from "@/components/ui/button";
@@ -15,9 +17,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import ImageUpload from "../custom ui/ImageUpload";
+import { Input } from "@/components/ui/input";
+
 
 const formSchema = z.object({
   title: z.string().min(2).max(20),
@@ -26,6 +29,9 @@ const formSchema = z.object({
 });
 
 const CollectionForm = () => {
+
+  const router = useRouter()
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -92,9 +98,14 @@ const CollectionForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="bg-grey-1 text-white cursor-pointer">
+          <div className="flex gap-4">
+            <Button type="submit" className="bg-blue-1 text-white cursor-pointer">
             Submit
           </Button>
+          <Button type="button" onClick={() => router.push("/collections")} className="bg-blue-1 text-white cursor-pointer">
+            Discard
+          </Button>
+          </div>
         </form>
       </Form>
     </div>
