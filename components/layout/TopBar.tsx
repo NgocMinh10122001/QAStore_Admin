@@ -14,8 +14,10 @@ const TopBar = () => {
   const [dropdownMenu, setDropdownMenu] = useState<boolean>(false);
   const pathname = usePathname()
   return (
-    <div className="sticky top-0 z-20 w-full flex justify-between items-center px-9 py-4 bg-blue-2 shadow-xl lg:hidden">
-      <Image src={""} alt="logo" width={150} height={70} />
+    <div className="sticky top-0 z-20 w-full flex justify-between items-center px-9 py-2 md:py-3 bg-blue-2 shadow-xl lg:hidden">
+        <div className="w-28 h-16 relative">
+          <Image src={"/images/qastore_logo3.png"} alt="logo" fill />
+        </div>
       <div className="flex gap-8 max-md:hidden">
         {navLinks.map((link) => {
           return (

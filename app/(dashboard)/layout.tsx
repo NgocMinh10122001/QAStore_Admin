@@ -4,6 +4,7 @@ import "../globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import LeftSideBar from "@/components/layout/LeftSideBar";
 import TopBar from "@/components/layout/TopBar";
+import { ToastProvider } from "@/lib/ToastProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
         <TopBar/>
         <div className="flex-1">{children}</div>
         </div>
+        <ToastProvider position="top-right"/>
       </body>
     </html>
     </ClerkProvider>

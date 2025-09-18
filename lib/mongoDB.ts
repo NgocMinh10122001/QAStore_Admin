@@ -21,7 +21,7 @@ export const connectToDB = async ():Promise<void> => {
         isConnected = true
 
     } catch (error) {
-        console.log(error);
+        console.log("Connect to mongo failed!",error);
         
     }
 
