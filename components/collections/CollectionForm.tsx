@@ -30,7 +30,11 @@ const formSchema = z.object({
   image: z.string().url(),
 });
 
-const CollectionForm = () => {
+interface ICollectionFormProps {
+  intialData? : CollectionType | null
+}
+
+const CollectionForm:React.FC<ICollectionFormProps> = ({intialData}) => {
 
   const router = useRouter()
 
@@ -39,12 +43,18 @@ const CollectionForm = () => {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues:intialData ? intialData : {
       title: "",
       description: "",
       image: "",
     },
   });
+
+  const handleKeyEnter = (e : React.KeyboardEvent<HTMLInputElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
+
+    if(e.key === "Enter")
+      {e.preventDefault()}
+  }
 
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -53,15 +63,18 @@ const CollectionForm = () => {
     try {
       setLoading(true)
 
-      const res = await fetch("/api/collections",{
+      const url = intialData ? `/api/collections/${intialData?._id}` : "/api/collections"
+
+      const res = await fetch(url,{
         method: "POST",
         body : JSON.stringify(values),
       })
 
       if(res.ok){
         setLoading(false)
-        toast.success("Collection created")
-        router.push("/collections")
+        toast.success(`Collection ${intialData ? "updated":"created"}`)
+        window.location.href = "/collections"
+        // router.push("/collections")
       }
 
     } catch (error) {
@@ -72,7 +85,7 @@ const CollectionForm = () => {
 
   return (
     <div className="p-10">
-      <p className="text-heading2-bold text-grey-1">Create Collection</p>
+      <p className="text-heading2-bold text-grey-1">{intialData ? "Update Collection":"Create Collection"}</p>
       <Separator className="my-4" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -83,7 +96,7 @@ const CollectionForm = () => {
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="Title" {...field} />
+                  <Input placeholder="Title" {...field} onKeyDown={handleKeyEnter}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -96,7 +109,7 @@ const CollectionForm = () => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Description" {...field} rows={5} />
+                  <Textarea placeholder="Description" {...field} rows={5} onKeyDown={handleKeyEnter}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -122,10 +135,10 @@ const CollectionForm = () => {
             )}
           />
           <div className="flex gap-4">
-            <Button type="submit" className="bg-blue-1 text-white cursor-pointer">
+            <Button type="submit" className="bg-blue-1 text-white cursor-pointer hover:bg-blue-500">
             Submit
           </Button>
-          <Button type="button" onClick={() => router.push("/collections")} className="bg-blue-1 text-white cursor-pointer">
+          <Button type="button" onClick={() => router.push("/collections")} className="bg-blue-1 text-white cursor-pointer hover:bg-blue-500">
             Discard
           </Button>
           </div>

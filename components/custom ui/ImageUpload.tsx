@@ -10,15 +10,10 @@ interface ImageUploadProps {
     onRemove : (value: string) => void
 }
 
-
-
 const ImageUpload:React.FC<ImageUploadProps> = ({onChange, onRemove, value}) => {
-  
 
     const onUpload = (result: CloudinaryUploadWidgetResults ) => {
             onChange(result?.info?.url || "");
-            console.log(result?.info?.url )
-
     }
   return (
     <div>
@@ -32,7 +27,7 @@ const ImageUpload:React.FC<ImageUploadProps> = ({onChange, onRemove, value}) => 
         </div>
         )}
       </div>
-      <CldUploadWidget uploadPreset="qastore" onSuccess={onUpload}>
+      <CldUploadWidget uploadPreset="qastore" onUpload={onUpload}>
       {({ open }) => {
         return <Button onClick={() => open()} className="bg-grey-1 text-white cursor-pointer"><Plus/>Upload an Image</Button>;
       }}

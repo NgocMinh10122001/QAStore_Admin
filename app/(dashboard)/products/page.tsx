@@ -7,14 +7,14 @@ import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const Collections = () => {
-  const [loading, setLoading] = useState(true);
+const Products = () => {
+  const [loading, setLoading] = useState(false);
   const [collections, setCollections] = useState([]);
   const router = useRouter()
 
   console.log("check data", collections)
 
-  const getCollections = async () => {
+  const getProducts = async () => {
     try {
       const res = await fetch("/api/collections", {
         method: "GET",
@@ -28,23 +28,23 @@ const Collections = () => {
     }
   };
 
-  useEffect(() => {
-    getCollections();
-  }, []);
+//   useEffect(() => {
+//     getProducts();
+//   }, []);
 
   if(loading) return <div className="text-black">Loading ....</div>
 
   return <div className="px-10 py-5">
     <div className="flex justify-between items-center">
-        <p className="text-heading2-bold">Collection</p>
-        <Button className="bg-blue-1 text-white cursor-pointer hover:bg-blue-500" onClick={() => router.push("collections/new")}>
+        <p className="text-heading2-bold">Products</p>
+        <Button className="bg-blue-1 text-white cursor-pointer hover:bg-blue-500" onClick={() => router.push("products/new")}>
             <Plus className="h-4 w-4 mr-2"/>
-            Create New Collection
+            Create New Product
         </Button>
     </div>
     <Separator className="my-4 bg-grey-1 "/>
-    <DataTable columns={columns} data={collections} searchKey = "title"/>
+    {/* <DataTable columns={columns} data={collections} searchKey = "title"/> */}
   </div>;
 };
 
-export default Collections;
+export default Products;
