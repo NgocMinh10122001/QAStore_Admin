@@ -36,7 +36,7 @@ const Products = () => {
 
   return <div className="px-10 py-5">
     <div className="flex justify-between items-center">
-        <p className="text-heading2-bold">Products</p>
+        <p className="text-heading2-bold text-grey-1">Products</p>
         <Button className="bg-blue-1 text-white cursor-pointer hover:bg-blue-500" onClick={() => router.push("products/new")}>
             <Plus className="h-4 w-4 mr-2"/>
             Create New Product

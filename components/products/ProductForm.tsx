@@ -25,11 +25,11 @@ import MuiltiText from "../custom ui/MuiltiText";
 import MultiSelect from "../custom ui/MultiSelect";
 
 const formSchema = z.object({
-  title: z.string().min(2).max(20),
+  title: z.string().min(2).max(40),
   description: z.string().min(2).max(500).trim(),
-  media: z.array(z.string()),
-  category: z.string(),
-  collections: z.array(z.string()),
+  media: z.array(z.string()).min(1),
+  category: z.string().min(1),
+  collections: z.array(z.string()).min(1),
   tags: z.array(z.string()),
   sizes: z.array(z.string()),
   colors: z.array(z.string()),
@@ -125,16 +125,17 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
   };
 
   return (
-    <div className="p-10">
+    <div className="p-10 text-grey-1">
       <p className="text-heading2-bold text-grey-1">
         {intialData ? "Update Product" : "Create Product"}
       </p>
-      <Separator className="my-4" />
+      <Separator className="my-4 bg-grey-1" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
             name="title"
+            rules={{ required: true }}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Title</FormLabel>
@@ -152,6 +153,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
           <FormField
             control={form.control}
             name="description"
+            rules={{ required: true }}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Description</FormLabel>
@@ -170,32 +172,40 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
           <FormField
             control={form.control}
             name="media"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Image</FormLabel>
-                <FormControl>
-                  <ImageUpload
-                    value={field.value}
-                    onChange={(url) => {
-                      field.onChange([...field.value, url]);
-                    }}
-                    onRemove={(url) =>
-                      field.onChange(
-                        [...field.value].filter((image) => {
-                          if (image !== url) return image;
-                        })
-                      )
-                    }
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            rules={{ required: true }}
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
+                    <ImageUpload
+                      value={field.value}
+                      onChange={(urls) => {
+                        return field.onChange(urls);
+                      }}
+                      options={{
+                        multiple: true,
+                        maxFiles: 10,
+                      }}
+                      onRemove={(url) =>
+                        field.onChange(
+                          [...field.value].filter((image) => {
+                            if (image !== url) return image;
+                          })
+                        )
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
           <div className="md:grid md:grid-cols-3 gap-8 items-start">
             <FormField
               control={form.control}
               name="price"
+              rules={{ required: true }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Price($)</FormLabel>
@@ -214,6 +224,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
             <FormField
               control={form.control}
               name="expense"
+              rules={{ required: true }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Expense($)</FormLabel>
@@ -232,6 +243,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
             <FormField
               control={form.control}
               name="category"
+              rules={{ required: true }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
@@ -273,13 +285,14 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
             <FormField
               control={form.control}
               name="collections"
+              rules={{ required: true }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>ColleTagsctions</FormLabel>
                   <FormControl>
                     <MultiSelect
                       placeholder="Select Collections"
-                      collections = {collections}
+                      collections={collections}
                       value={field.value}
                       onChange={(_id) => field.onChange([...field.value, _id])}
                       onRemove={(idToRemove) =>
@@ -306,7 +319,9 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
                     <MuiltiText
                       placeholder="Colors"
                       value={field.value}
-                      onChange={(color) => field.onChange([...field.value, color])}
+                      onChange={(color) =>
+                        field.onChange([...field.value, color])
+                      }
                       onRemove={(colorToRemove) =>
                         field.onChange(
                           [...field.value].filter((item) => {
@@ -330,7 +345,9 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
                     <MuiltiText
                       placeholder="Sizes"
                       value={field.value}
-                      onChange={(size) => field.onChange([...field.value, size])}
+                      onChange={(size) =>
+                        field.onChange([...field.value, size])
+                      }
                       onRemove={(sizeToRemove) =>
                         field.onChange(
                           [...field.value].filter((item) => {

@@ -50,7 +50,7 @@ const Delete : React.FC<IDeleteProps> = ({id}) => {
     
     <AlertDialog>
   <AlertDialogTrigger>
-    <div className='px-2 py-[0.6rem] cursor-pointer rounded-md bg-red-1 text-white'>
+    <div className='px-2 py-[0.6rem] cursor-pointer rounded-md bg-red-1 hover:bg-red-400 duration-150 ease-in-out text-white'>
         <Trash className='h-4 w-4'/>
     </div>
   </AlertDialogTrigger>

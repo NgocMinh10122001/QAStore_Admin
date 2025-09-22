@@ -5,13 +5,14 @@ import React from 'react'
 import { ColumnDef } from "@tanstack/react-table"
 import Delete from '../custom ui/Delete'
 import Link from 'next/link'
+import Edit from '../custom ui/Edit'
 
 
 export const columns: ColumnDef<CollectionType>[] = [
   {
     accessorKey: "title",
     header: "Title",
-    cell : ({row}) => <Link href={`/collections/${row.original._id}`} className='hover:text-blue-1 hover:underline'>{row.original.title}</Link>
+    cell : ({row}) => <p>{row.original.title}</p>
   },
   {
     accessorKey: "products",
@@ -20,6 +21,9 @@ export const columns: ColumnDef<CollectionType>[] = [
   },
   {
     id : "actions",
-    cell : ({row})=> <Delete id = {row.original._id}/>
+    cell : ({row})=> <div className='flex gap-2 items-center'>
+      <Delete id = {row.original._id}/>
+      <Edit id = {row.original._id}/>
+    </div>
   },
 ]
