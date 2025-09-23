@@ -46,12 +46,6 @@ export const POST = async (req: NextRequest) => {
 export const GET = async () => {
     try {
 
-        const {userId} = await auth()
-        
-        if(!userId) {
-            return new NextResponse("Unauthorized", {status : 403})
-        }
-
         await connectToDB()
 
 
