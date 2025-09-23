@@ -1,45 +1,44 @@
-"use client"
-import CollectionForm from '@/components/collections/CollectionForm'
-import React, { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
+"use client";
+import CollectionForm from "@/components/collections/CollectionForm";
+import Loader from "@/components/custom ui/Loader";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface ICollectionDetail {
-    id : string
+  id: string;
 }
 
-const CollectionDetail = ({id} : ICollectionDetail) => {
+const CollectionDetail = ({ id }: ICollectionDetail) => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [collection, setCollection] = useState<CollectionType | null>(null);
 
-    const [loading, setLoading] = useState(true)
-    const [collection, setCollection] = useState<CollectionType | null>(null)
+  const getCollectionDetail = async () => {
+    try {
+      const res = await fetch(`/api/collections/${id}`, {
+        method: "GET",
+      });
 
-    const getCollectionDetail = async () => {
-        try {
-            
-            const res = await fetch(`/api/collections/${id}`,{
-                method:"GET"
-            })
+      const data = await res.json();
 
-            const data = await res.json()
+      setCollection(data);
 
-            setCollection(data)
-            
-            setLoading(false)
-
-        } catch (error) {
-            console.log("Something went wrong, please try again!", error);
-            toast.error("get collection failed")
-        }
+      setLoading(false);
+    } catch (error) {
+      console.log("Something went wrong, please try again!", error);
+      toast.error("get collection failed");
+      router.push("/products");
     }
+  };
 
-    useEffect(() => {
-        getCollectionDetail()
-    },[])
+  useEffect(() => {
+    getCollectionDetail();
+  }, []);
 
-if(loading) return <div>Loading...</div>
+  if (loading) return <Loader />;
 
-  return (
-    <CollectionForm intialData = {collection}/>
-  )
-}
+  return <CollectionForm intialData={collection} />;
+};
 
-export default CollectionDetail
+export default CollectionDetail;

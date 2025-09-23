@@ -17,9 +17,10 @@ import toast from 'react-hot-toast'
 
 interface IDeleteProps {
   id: string
+  item: string
 }
 
-const Delete : React.FC<IDeleteProps> = ({id}) => {
+const Delete : React.FC<IDeleteProps> = ({id,item}) => {
 
   const [loading, setLoading] = useState(false)
 
@@ -28,15 +29,20 @@ const Delete : React.FC<IDeleteProps> = ({id}) => {
     try {
 
       setLoading(true)
-
-    const res = await fetch(`/api/collections/${id}`,{
+      const itemTpype = item === "collection" ? "collections" : "products"
+      console.log("check delete id", id, itemTpype);
+      
+    const res = await fetch(`/api/${itemTpype}/${id}`,{
       method:"DELETE"
     })
 
+    console.log("check delete", res);
+    
+
     if(res.ok) {
       setLoading(false)
-      window.location.href = ("/collections")
-      toast.success("collection is deleted")
+      window.location.href = (`/${itemTpype}`)
+      toast.success(`${itemTpype} is deleted`)
     }
 
     } catch (error) {

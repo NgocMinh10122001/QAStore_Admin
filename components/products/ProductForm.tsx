@@ -23,6 +23,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import MuiltiText from "../custom ui/MuiltiText";
 import MultiSelect from "../custom ui/MultiSelect";
+import Loader from "../custom ui/Loader";
 
 const formSchema = z.object({
   title: z.string().min(2).max(40),
@@ -33,8 +34,8 @@ const formSchema = z.object({
   tags: z.array(z.string()),
   sizes: z.array(z.string()),
   colors: z.array(z.string()),
-  price: z.coerce.number().min(0.1),
-  expense: z.coerce.number().min(0.1),
+  price: z.number().min(0.1),
+  expense: z.number().min(0.1),
 });
 
 interface IProductFormProps {
@@ -44,8 +45,9 @@ interface IProductFormProps {
 const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
   const router = useRouter();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [collections, setCollections] = useState<CollectionType[]>([]);
+  
 
   const getCollections = async () => {
     try {
@@ -71,7 +73,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: intialData
-      ? intialData
+      ? {...intialData, collections:intialData.collections.map((item) => item._id)}
       : {
           title: "",
           description: "",
@@ -101,8 +103,6 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
     // toast.success("success submit")
     // console.log(values);
     try {
-      setLoading(true);
-
       const url = intialData
         ? `/api/products/${intialData?._id}`
         : "/api/products";
@@ -113,16 +113,17 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
       });
 
       if (res.ok) {
-        setLoading(false);
         toast.success(`Product ${intialData ? "updated" : "created"}`);
-        window.location.href = "/products";
-        // router.push("/collections")
+        // window.location.href = "/products";
+        router.push("/products")
       }
     } catch (error) {
       console.log("[Product Form Submit Error]", error);
       toast.error("Somthing went wrong, please try a gain");
     }
   };
+
+  if(loading) return <Loader/>
 
   return (
     <div className="p-10 text-grey-1">
@@ -214,6 +215,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
                       type="number"
                       placeholder="Price"
                       {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
                       onKeyDown={handleKeyEnter}
                     />
                   </FormControl>
@@ -233,6 +235,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
                       type="number"
                       placeholder="Expense"
                       {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
                       onKeyDown={handleKeyEnter}
                     />
                   </FormControl>
@@ -282,7 +285,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {collections && collections.length > 0 && (<FormField
               control={form.control}
               name="collections"
               rules={{ required: true }}
@@ -308,7 +311,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            />)}
             <FormField
               control={form.control}
               name="colors"
@@ -371,7 +374,7 @@ const ProductForm: React.FC<IProductFormProps> = ({ intialData }) => {
             </Button>
             <Button
               type="button"
-              onClick={() => router.push("/collections")}
+              onClick={() => router.push("/products")}
               className="bg-blue-1 text-white cursor-pointer hover:bg-blue-500"
             >
               Discard

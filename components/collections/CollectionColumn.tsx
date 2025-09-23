@@ -22,7 +22,7 @@ export const columns: ColumnDef<CollectionType>[] = [
   {
     id : "actions",
     cell : ({row})=> <div className='flex gap-2 items-center'>
-      <Delete id = {row.original._id}/>
+      <Delete id = {row.original._id} item="collection"/>
       <Edit id = {row.original._id}/>
     </div>
   },

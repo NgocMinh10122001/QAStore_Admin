@@ -30,6 +30,7 @@ const MultiSelect: React.FC<IMultiSelectProps> = ({
   onRemove,
   collections,
 }) => {
+  
   // const [commandList, setCommandList] = useState(false)
   const [inputValue, setInputValue] = useState("");
   const [open, setOpen] = useState(false);

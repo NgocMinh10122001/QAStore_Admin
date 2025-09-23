@@ -78,8 +78,8 @@ const CollectionForm: React.FC<ICollectionFormProps> = ({ intialData }) => {
       if (res.ok) {
         setLoading(false);
         toast.success(`Collection ${intialData ? "updated" : "created"}`);
-        window.location.href = "/collections";
-        // router.push("/collections")
+        // window.location.href = "/collections";
+        router.push("/collections")
       }
     } catch (error) {
       console.log("[Collection Form Submit Error]", error);

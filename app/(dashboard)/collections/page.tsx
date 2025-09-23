@@ -1,6 +1,7 @@
 "use client";
 import { columns } from "@/components/collections/CollectionColumn";
 import { DataTable } from "@/components/custom ui/DataTable";
+import Loader from "@/components/custom ui/Loader";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
@@ -32,7 +33,7 @@ const Collections = () => {
     getCollections();
   }, []);
 
-  if(loading) return <div className="text-black">Loading ....</div>
+  if(loading) return <Loader/>
 
   return <div className="px-10 py-5">
     <div className="flex justify-between items-center">

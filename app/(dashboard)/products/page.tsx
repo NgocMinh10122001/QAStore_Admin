@@ -1,6 +1,7 @@
 "use client";
-import { columns } from "@/components/collections/CollectionColumn";
 import { DataTable } from "@/components/custom ui/DataTable";
+import Loader from "@/components/custom ui/Loader";
+import { columns } from "@/components/products/ProductColumn";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
@@ -8,31 +9,31 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Products = () => {
-  const [loading, setLoading] = useState(false);
-  const [collections, setCollections] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState([]);
   const router = useRouter()
 
-  console.log("check data", collections)
+  console.log("check data", products)
 
   const getProducts = async () => {
     try {
-      const res = await fetch("/api/collections", {
+      const res = await fetch("/api/products", {
         method: "GET",
       });
 
       const data = await res.json();
-      setCollections(data);
+      setProducts(data);
       setLoading(false);
     } catch (error) {
-      console.log("get collection error", error);
+      console.log("get products error", error);
     }
   };
 
-//   useEffect(() => {
-//     getProducts();
-//   }, []);
+  useEffect(() => {
+    getProducts();
+  }, []);
 
-  if(loading) return <div className="text-black">Loading ....</div>
+  if(loading) return <Loader/>
 
   return <div className="px-10 py-5">
     <div className="flex justify-between items-center">
@@ -43,7 +44,7 @@ const Products = () => {
         </Button>
     </div>
     <Separator className="my-4 bg-grey-1 "/>
-    {/* <DataTable columns={columns} data={collections} searchKey = "title"/> */}
+    <DataTable columns={columns} data={products} searchKey = "title"/>
   </div>;
 };
 
