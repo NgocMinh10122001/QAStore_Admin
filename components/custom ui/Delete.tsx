@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from 'react'
 import toast from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
 interface IDeleteProps {
   id: string
@@ -23,11 +24,12 @@ interface IDeleteProps {
 const Delete : React.FC<IDeleteProps> = ({id,item}) => {
 
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   const onDelete = async () => {
 
     try {
-
+      console.log(loading);
       setLoading(true)
       const itemTpype = item === "collection" ? "collections" : "products"
       console.log("check delete id", id, itemTpype);
@@ -36,12 +38,10 @@ const Delete : React.FC<IDeleteProps> = ({id,item}) => {
       method:"DELETE"
     })
 
-    console.log("check delete", res);
-    
-
     if(res.ok) {
       setLoading(false)
       window.location.href = (`/${itemTpype}`)
+      // router.push(`/${itemTpype}`)
       toast.success(`${itemTpype} is deleted`)
     }
 

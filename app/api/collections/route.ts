@@ -43,7 +43,7 @@ export const POST = async (req: NextRequest) => {
 
 // get collections
 
-export const GET = async (req: NextRequest) => {
+export const GET = async () => {
     try {
 
         const {userId} = await auth()

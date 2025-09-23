@@ -6,12 +6,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { productId: string } }
+  { params }: { params: Promise<{ productId: string }> }
 ) => {
   try {
     await connectToDB();
-
-    const product = await Product.findById(params.productId).populate({
+    const { productId } = await params;
+    const product = await Product.findById(productId).populate({
       path: "collections",
       model: Collection,
     });
@@ -32,7 +32,7 @@ export const GET = async (
 
 export const POST = async (
   req: NextRequest,
-  { params }: { params: { productId: string } }
+  { params }: { params: Promise<{ productId: string }> }
 ) => {
   try {
     const { userId } = await auth();
@@ -41,9 +41,10 @@ export const POST = async (
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    const { productId } = await params;
     await connectToDB();
 
-    const product = await Product.findById(params.productId);
+    const product = await Product.findById(productId);
 
     if (!product) {
       return new NextResponse(
@@ -65,14 +66,24 @@ export const POST = async (
       expense,
     } = await req.json();
 
-    if (!title || !description || !media || !category || !price || !expense || !collections) {
+    if (
+      !title ||
+      !description ||
+      !media ||
+      !category ||
+      !price ||
+      !expense ||
+      !collections
+    ) {
       return new NextResponse("Not enough data to create a new product", {
         status: 400,
       });
     }
 
-   // Chuyển đổi sang string để so sánh đúng
-    const currentCollections = product.collections.map((id: string) => id.toString());
+    // Chuyển đổi sang string để so sánh đúng
+    const currentCollections = product.collections.map((id: string) =>
+      id.toString()
+    );
     const newCollections = collections.map((id: string) => id.toString());
 
     // Tìm collections được thêm và bỏ
@@ -83,7 +94,6 @@ export const POST = async (
     const removedCollections = currentCollections.filter(
       (collectionId: string) => !newCollections.includes(collectionId)
     );
-
 
     // Update collections
     await Promise.all([
@@ -123,7 +133,6 @@ export const POST = async (
     await updatedProduct.save();
 
     return NextResponse.json(updatedProduct, { status: 200 });
-
   } catch (error) {
     console.log("products_[productId]_POST", error);
 
@@ -131,16 +140,19 @@ export const POST = async (
   }
 };
 
-export const DELETE = async (req: NextRequest, {params} : {params: {productId : string}}) => {
+export const DELETE = async (
+  req: NextRequest,
+  { params }: { params: Promise<{ productId: string }> }
+) => {
   try {
     const { userId } = await auth();
 
     if (!userId) return new NextResponse("Unauthorized", { status: 401 });
 
-    const {productId} = params;
+    const { productId } = await params;
 
     await connectToDB();
-    
+
     if (!productId) {
       return new NextResponse("Product ID is required", { status: 400 });
     }

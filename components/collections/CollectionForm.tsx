@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -62,7 +61,7 @@ const CollectionForm: React.FC<ICollectionFormProps> = ({ intialData }) => {
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // toast.success("success submit")
-    // console.log(values);
+    console.log(loading);
     try {
       setLoading(true);
 
