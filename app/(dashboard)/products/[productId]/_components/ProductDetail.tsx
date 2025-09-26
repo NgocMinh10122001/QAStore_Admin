@@ -37,7 +37,7 @@ const ProductDetail = ({id} : ICollectionDetail) => {
 
     useEffect(() => {
         getProductDetail()
-    })
+    },[])
 
 if(loading) return <Loader/>
 

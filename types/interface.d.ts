@@ -68,3 +68,10 @@ interface CloudinaryUploadInfo {
     path: string;
     thumbnail_url: string;
 }
+
+interface CartItem {
+    item : ProductType,
+    quantity : number,
+    color?: string,
+    size?: string
+}

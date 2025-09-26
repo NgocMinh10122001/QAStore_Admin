@@ -13,8 +13,6 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const router = useRouter()
 
-  console.log("check data", products)
-
   const getProducts = async () => {
     try {
       const res = await fetch("/api/products", {

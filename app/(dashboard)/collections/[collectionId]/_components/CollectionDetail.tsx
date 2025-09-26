@@ -34,7 +34,7 @@ const CollectionDetail = ({ id }: ICollectionDetail) => {
 
   useEffect(() => {
     getCollectionDetail();
-  });
+  },[]);
 
   if (loading) return <Loader />;
 

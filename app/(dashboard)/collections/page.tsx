@@ -13,8 +13,6 @@ const Collections = () => {
   const [collections, setCollections] = useState([]);
   const router = useRouter()
 
-  console.log("check data", collections)
-
   const getCollections = async () => {
     try {
       const res = await fetch("/api/collections", {
