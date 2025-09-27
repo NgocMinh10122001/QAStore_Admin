@@ -1,4 +1,5 @@
 import Collection from "@/lib/models/Collections";
+import Product from "@/lib/models/Product";
 import { connectToDB } from "@/lib/mongoDB";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -10,7 +11,7 @@ export const GET = async (
   try {
     await connectToDB();
     const { collectionId } = await params;
-    const collection = await Collection.findById(collectionId);
+    const collection = await Collection.findById(collectionId).populate({ path: "products", model: Product });
 
     if (!collection)
       return new NextResponse(
